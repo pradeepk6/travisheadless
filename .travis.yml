@@ -1,14 +1,14 @@
 dist: trusty
 language: java
 addons:
-  chrome: stable
-  #firefox: latest
+  firefox: 58.0.1
 before_install:
-    - # for chrome : start your web application and listen on `localhost`
-    - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-env:
-      - # for firefox
-      - #MOZ_HEADLESS=1
-
+    - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz
+    - mkdir webdrivers
+    - tar -xzf geckodriver-v0.19.1-linux64.tar.gz -C webdrivers
+    - export PATH=$PATH:$PWD/webdrivers
+    - geckodriver --version
+    - whereis geckodriver
+    - export MOZ_HEADLESS=1
 script:
-  - mvn test
+  - mvn verify -Dwebdriver="firefox" -Dwebdriver.headless="1"
